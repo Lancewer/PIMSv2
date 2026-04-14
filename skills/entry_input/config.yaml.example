@@ -1,0 +1,22 @@
+# Entry Input Skill 配置文件模板
+# 复制此文件为 config.yaml 并根据需要修改
+
+raw_path: ./raw                     # raw 库路径（相对或绝对路径）
+                                    # 示例绝对路径: /Users/yourname/Documents/pims/raw
+
+git_auto_commit: true               # 是否自动 git commit
+git_auto_push: false                # 是否自动推送到远程仓库
+git_remote_url: ''                  # 远程仓库地址
+                                    # 示例: git@github.com:yourname/private-pims.git
+
+backup:
+  enabled: true                     # 是否启用加密备份
+  tool: restic                      # 备份工具：restic 或 borg
+  repo_path: ./backup-repo          # 备份仓库路径
+  schedule: daily                   # 备份频率：daily 或 weekly
+
+# 使用说明：
+# 1. 首次运行 python index.py init 时会自动创建 config.yaml
+# 2. 也可以手动复制此文件: cp config.yaml.example config.yaml
+# 3. 修改 raw_path 为你希望存放数据的实际路径
+# 4. 如需远程备份，设置 git_remote_url 并配置 SSH 密钥

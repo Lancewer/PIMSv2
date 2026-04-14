@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Entry Input Skill 运行时数据
+skills/entry_input/raw/
+skills/entry_input/config.yaml       # 用户配置（不提交）
+!skills/entry_input/config.yaml.example  # 模板文件（提交）
+skills/entry_input/backup-repo/
+
+# 备份仓库
+backup-repo/
