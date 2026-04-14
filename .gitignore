@@ -31,3 +31,6 @@ skills/entry_input/backup-repo/
 
 # 备份仓库
 backup-repo/
+
+# zip files
+*.zip
