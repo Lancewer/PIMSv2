@@ -57,7 +57,8 @@ class ConfigManager:
     def get_raw_path(self) -> Path:
         """获取 raw 库路径（解析为绝对路径）"""
         raw_path = self.config.get('raw_path', './raw')
-        p = Path(raw_path)
+        # 先展开 ~ 符号，再判断是否绝对路径
+        p = Path(raw_path).expanduser()
         if not p.is_absolute():
             p = self.skill_dir / p
         return p.resolve()
