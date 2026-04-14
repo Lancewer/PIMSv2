@@ -502,6 +502,8 @@ def init_system(config: ConfigManager, git: GitManager):
     if user_input:
         config.update('raw-path', user_input)
         raw_path = config.get_raw_path()
+        # 用户更新了路径，需要重新创建 GitManager
+        git = GitManager(raw_path)
     
     # 创建目录
     raw_path.mkdir(parents=True, exist_ok=True)
