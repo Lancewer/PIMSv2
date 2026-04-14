@@ -23,21 +23,25 @@ import yaml
 # ============================================================================
 
 DEFAULT_CONFIG = {
-    'raw_path': './raw',
+    'raw_path': '~/PIMS_repo',         # 默认数据目录（用户主目录下）
     'git_auto_commit': True,
     'git_auto_push': False,
     'git_remote_url': '',
     'backup': {
         'enabled': True,
         'tool': 'restic',
-        'repo_path': './backup-repo',
+        'repo_path': '~/PIMS_repo/backups',  # 默认在数据目录下的 backups 子目录
         'schedule': 'daily'
     }
 }
 
 
 class ConfigManager:
-    """配置管理器"""
+    """配置管理器
+    
+    配置文件存放在 skill 目录下，便于 skill 管理。
+    用户数据目录（raw_path）和备份目录由配置指定。
+    """
     
     def __init__(self, skill_dir: Path):
         self.skill_dir = skill_dir
@@ -51,16 +55,20 @@ class ConfigManager:
         return DEFAULT_CONFIG.copy()
     
     def save(self):
-        """保存配置"""
+        """保存配置到 skill 目录"""
         self.config_file.write_text(yaml.dump(self.config, allow_unicode=True, default_flow_style=False))
     
     def get_raw_path(self) -> Path:
-        """获取 raw 库路径（解析为绝对路径）"""
-        raw_path = self.config.get('raw_path', './raw')
-        # 先展开 ~ 符号，再判断是否绝对路径
+        """获取数据目录路径（解析为绝对路径）"""
+        raw_path = self.config.get('raw_path', '~/PIMS_repo')
+        # 展开 ~ 符号
         p = Path(raw_path).expanduser()
-        if not p.is_absolute():
-            p = self.skill_dir / p
+        return p.resolve()
+    
+    def get_backup_path(self) -> Path:
+        """获取备份仓库路径"""
+        backup_path = self.config.get('backup', {}).get('repo_path', '~/PIMS_repo/backups')
+        p = Path(backup_path).expanduser()
         return p.resolve()
     
     def update(self, key: str, value: str):
@@ -421,7 +429,12 @@ class BackupManager:
         self.config = config.get('backup', {})
         self.raw_path = raw_path
         self.tool = self.config.get('tool', 'restic')
-        self.repo_path = Path(self.config.get('repo_path', './backup-repo'))
+        # 备份路径：如果不是绝对路径，则相对于 raw_path
+        repo_path = self.config.get('repo_path', 'backups')
+        p = Path(repo_path).expanduser()
+        if not p.is_absolute():
+            p = raw_path / p
+        self.repo_path = p.resolve()
     
     def backup(self):
         """执行备份"""
@@ -579,6 +592,7 @@ def main():
     
     # 初始化管理器
     config = ConfigManager(skill_dir)
+    config.config = config.load()  # 加载配置
     
     # 检查是否需要初始化
     if args.command != 'init' and not config.get_raw_path().exists():

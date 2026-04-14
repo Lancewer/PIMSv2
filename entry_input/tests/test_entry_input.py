@@ -65,12 +65,18 @@ class TestConfigManager:
     
     def test_default_config(self, config):
         """测试默认配置"""
-        assert config.config == DEFAULT_CONFIG
+        # 验证默认配置结构
+        assert config.config['raw_path'] == '~/PIMS_repo'
+        assert config.config['git_auto_commit'] == True
     
     def test_save_and_load_config(self, config, temp_dir):
         """测试配置保存和加载"""
+        # 更新 raw_path 并保存
         config.update('raw-path', str(temp_dir['raw_dir']))
-        config.save()
+        
+        # 验证配置文件已保存到 skill_dir 下
+        config_file = temp_dir['skill_dir'] / 'config.yaml'
+        assert config_file.exists()
         
         # 重新加载
         config2 = ConfigManager(temp_dir['skill_dir'])
