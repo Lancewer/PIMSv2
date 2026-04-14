@@ -24,10 +24,10 @@ htmlcov/
 *~
 
 # Entry Input Skill 运行时数据
-skills/entry_input/raw/
-skills/entry_input/config.yaml       # 用户配置（不提交）
-!skills/entry_input/config.yaml.example  # 模板文件（提交）
-skills/entry_input/backup-repo/
+entry_input/raw/                    # 测试产生的数据目录
+entry_input/config.yaml             # 用户配置（不提交）
+!entry_input/config.yaml.example    # 模板文件（提交）
+raw/                                # 根目录下的 raw（如果运行测试）
 
 # 备份仓库
 backup-repo/
