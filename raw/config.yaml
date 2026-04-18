@@ -1,0 +1,9 @@
+backup:
+  enabled: true
+  repo_path: backups
+  schedule: daily
+  tool: borg
+git_auto_commit: true
+git_auto_push: false
+git_remote_url: git@github.com:test/test.git
+raw_path: ../raw
